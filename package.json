@@ -14,7 +14,9 @@
   "author": "Arut Thanomwatana",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.5.3",
+    "@line/bot-sdk": "^6.2.1",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
     "nodemon": "^1.18.4"
   }
 }
