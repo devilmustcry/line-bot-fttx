@@ -12,12 +12,14 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>')
 })
 app.post('/webhook', line.middleware(config), (req, res) => {
+
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) => res.json(result));
 });
 const client = new line.Client(config);
 function handleEvent(event) {
+  console.log(event.type)
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
