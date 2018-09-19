@@ -15,15 +15,17 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 
   Promise
     .all(req.body.events.map(handleEvent))
-    .then((result) => res.json(result));
+    .then((result) => res.json(result))
+    .catch((error) => console.log(error));
 });
 const client = new line.Client(config);
 function handleEvent(event) {
-  console.log(event.type)
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
-
+  console.log(event.type)
+  console.log(event.message.type)
+  console.log(event.message)
   return client.replyMessage(event.replyToken, {
     type: 'text',
     text: event.message.text
