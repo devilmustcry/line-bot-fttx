@@ -4,11 +4,15 @@
   "description": "Personal bot for training line bot",
   "main": "index.js",
   "scripts": {
+    "dev": "node index.js",
     "test": "test"
   },
   "keywords": [
     "linebot"
   ],
   "author": "Arut Thanomwatana",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.5.3"
+  }
 }
