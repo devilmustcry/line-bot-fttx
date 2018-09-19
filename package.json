@@ -1,0 +1,14 @@
+{
+  "name": "personal-bot",
+  "version": "1.0.0",
+  "description": "Personal bot for training line bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "linebot"
+  ],
+  "author": "Arut Thanomwatana",
+  "license": "MIT"
+}
