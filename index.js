@@ -28,10 +28,25 @@ function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null)
   }
-  if (state === 'memo') {
+  if (event.message.text === 'q') {
+    text = 'ถอดกางเกงแล้วไม่เย็ดซะแล้วไง'
+    state = 'idle'
+  }
+  else if (state === 'memo-text') {
     try {
-      memo.write(event.message.text)
-      text = 'จดนัดให้มึงแล้ว'
+      memo.setText(event.message.text)
+      text = 'นัดมึงวันไหน?'
+      state = 'memo-date'
+    } catch (err) {
+      console.log(err)
+      text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
+      state = idle
+    }
+  } else if (state === 'memo-date') {
+    try {
+      memo.setDate(event.message.date)
+      memo.write()
+      text = 'นัดให้มึงแล้ว'
     } catch (err) {
       console.log(err)
       text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
@@ -44,11 +59,6 @@ function handleEvent(event) {
     }
     else if (event.message.text.includes('กินอะไรดี')) {
       text = randomEat()
-    }
-  }
-  if (process.env.NODE_ENV === 'local') {
-    return {
-      message: text
     }
   }
   return client.replyMessage(event.replyToken, {
