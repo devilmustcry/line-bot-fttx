@@ -24,7 +24,7 @@ const memoServices = {
           return snap.val()[key]
         })
         const text = allValue.reduce((prev, curr, index) => {
-          return prev + `มึงมีนัดวันที่ ${nowDate(curr.date)} นัดไป ${curr.text} \n`
+          return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
         })
         return text
       }
