@@ -4,9 +4,9 @@ moment.locale('th')
 const dateTime = {
   nowDate (date) {
     if (date) {
-      return moment(date)
+      return moment(date).format('DD MMM YYYY')
     }
-    return moment()
+    return moment().format('DD MMM YYYY')
   }
 }
 
