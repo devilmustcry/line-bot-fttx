@@ -5,5 +5,9 @@ const config = {
   channelSecret: '1d80d885eabef21974c85038a7845c6a'
 }
 
-const client = new line.Client(config);
-module.exports = {client, line}
+const lineClient = new line.Client(config);
+const middleware = line.middleware(config)
+module.exports = {
+  lineClient,
+  middleware
+}

@@ -1,16 +1,15 @@
 const express = require('express')
 const port = process.env.PORT || 5000
-const line = require('@line/bot-sdk')
 const { randomEat } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
-const lineClient = require('./clients/lineClient')
+const {lineClient, middleware} = require('./clients/lineClient')
 
 const app = express()
 app.get('/', (req, res) => {
   res.send('<h1>Hello world</h1>')
 })
-app.post('/webhook', line.middleware(config), (req, res) => {
+app.post('/webhook', middleware, (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) =>  {
