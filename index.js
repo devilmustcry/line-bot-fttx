@@ -15,8 +15,12 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 
   Promise
     .all(req.body.events.map(handleEvent))
-    .then((result) => res.json(result))
+    .then((result) =>  {
+      console.log('Return result')
+      res.json(result) 
+    })
     .catch((error) => console.log(error));
+
 });
 const client = new line.Client(config);
 function handleEvent(event) {
@@ -28,7 +32,7 @@ function handleEvent(event) {
   console.log(event.message)
   return client.replyMessage(event.replyToken, {
     type: 'text',
-    text: event.message.text
+    text: 'สวัสดีตรองนี่คือก้าวแรกของ Line bot'
   });
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))
