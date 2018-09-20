@@ -19,17 +19,18 @@ app.post('/webhook', middleware, (req, res) => {
 
 });
 function handleEvent(event) {
+  const userResponseText = event.message.text
   let text = 'มึงพูดเรื่องไรของมึงวะ....'
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null)
   }
-  if (event.message.text === 'q') {
+  if (userResponseText === 'q') {
     text = 'ถอดกางเกงแล้วไม่เย็ดซะแล้วไง'
     state = 'idle'
   }
   else if (state === 'memo-text') {
     try {
-      memo.setText(event.message.text)
+      memo.setText(userResponseText)
       text = 'นัดมึงวันไหน?'
       state = 'memo-date'
     } catch (err) {
@@ -39,7 +40,7 @@ function handleEvent(event) {
     }
   } else if (state === 'memo-date') {
     try {
-      memo.setDate(event.message.text)
+      memo.setDate(userResponseText)
       memo.write()
       text = 'นัดให้มึงแล้ว'
     } catch (err) {
@@ -48,18 +49,19 @@ function handleEvent(event) {
     }
     state = 'idle'
   } else {
-    if (event.message.text === 'จด') {
+    if (userResponseText === 'จด') {
       state = 'memo-text'
       text = 'มึงมีนัดอะไร?'
-    } else if (event.message.text.includes('มีนัดอะไร')) {
+    } else if (userResponseText.includes('มีนัดอะไร')) {
 
-    } else if (event.message.text.includes('กินอะไรดี')) {
+    } else if (userResponseText.includes('กินอะไรดี')) {
       text = randomEat()
     }
   }
   return lineClient.replyMessage(event.replyToken, {
-    type: 'text',
-    text: text
+    type: 'message',
+    text: text,
+    label: 'text'
   })
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))

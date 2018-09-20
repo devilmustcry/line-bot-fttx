@@ -6,7 +6,7 @@ const memoServices = {
     text: '',
     date: ''
   },
-  write (text) {
+  write () {
     const memoRef = database.ref('memos/')
     memoRef.push({
       text: this.state.text,
