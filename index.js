@@ -59,9 +59,8 @@ function handleEvent(event) {
     }
   }
   return lineClient.replyMessage(event.replyToken, {
-    type: 'message',
-    text: text,
-    label: 'text'
+    type: 'text',
+    text: text
   })
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))
