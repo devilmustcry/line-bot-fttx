@@ -19,6 +19,7 @@ const memoServices = {
     const memoRef = database.ref('memos/')
     memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
       if (snap.val()) {
+        console.log(snap.val())
         const allValue = snap.val()
         const text = allValue.reduce((prev, curr, index) => {
           return prev + `มึงมีนัดวันที่ ${nowDate(curr.date)} นัดไป ${curr.text} \n`
