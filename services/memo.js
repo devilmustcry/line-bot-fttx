@@ -34,6 +34,7 @@ const memoServices = {
     this.state.text = text
   },
   setDate (date) {
+    console.log(dateTime.nowDate(date).format('YYYY-MM-DD'))
     this.state.date = dateTime.nowDate(date).unix()
   }
 }
