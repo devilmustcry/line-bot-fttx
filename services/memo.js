@@ -17,7 +17,7 @@ const memoServices = {
   getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
     const memoRef = database.ref('memos/')
-    memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
+    return memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
       if (snap.val()) {
         const objectKeys = Object.keys(snap.val())
         const allValue = objectKeys.map((key) => {
@@ -26,6 +26,7 @@ const memoServices = {
         const text = allValue.reduce((prev, curr, index) => {
           return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
         }, '')
+        console.log(text, 'Text in snapshot')
         return text
       }
     })
