@@ -54,7 +54,7 @@ function handleEvent(event) {
     state = 'idle'
   } else {
     if (event.message.text === 'จด') {
-      state = 'memo'
+      state = 'memo-text'
       text = 'มึงมีนัดอะไร?'
     }
     else if (event.message.text.includes('กินอะไรดี')) {
