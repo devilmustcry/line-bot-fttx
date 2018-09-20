@@ -17,7 +17,7 @@ const memoServices = {
   getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
     const memoRef = database.ref('memos/')
-    return memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
+    memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
       if (snap.val()) {
         const objectKeys = Object.keys(snap.val())
         const allValue = objectKeys.map((key) => {

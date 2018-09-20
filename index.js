@@ -10,7 +10,7 @@ const {lineClient, middleware} = require('./clients/lineClient')
 let routerObjects = new Router()
 
 const app = new Koa()
-app.use(cors)
+app.use(cors())
 
 routerObjects.get('/', (ctx) => {
   ctx.body = 'Hello world'
@@ -77,4 +77,5 @@ function handleEvent(event) {
     text: text
   })
 }
-app.listen(port, () => console.log(`app listening on port ${port}!`))
+app.listen(port)
+console.log('Sever is start at ', port)
