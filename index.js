@@ -33,6 +33,7 @@ function handleEvent(event) {
       memo.write(event.message.text)
       text = 'จดนัดให้มึงแล้ว'
     } catch (err) {
+      console.log(err)
       text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
     }
     state = 'idle'
@@ -56,5 +57,3 @@ function handleEvent(event) {
   })
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))
-
-
