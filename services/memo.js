@@ -17,8 +17,8 @@ const memoServices = {
   async getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
     const memos = await database.ref('memos/').startAt(todayUnix).once('value')
-    const allValue = Object.keys(memos).map((key) => {
-      return memos[key].val()
+    const allValue = Object.values(memos.val()).map((memo) => {
+      return memo
     })
     console.log(allValue)
     const text = allValue.reduce((prev, curr, index) => {
