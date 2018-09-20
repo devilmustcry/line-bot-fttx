@@ -2,7 +2,8 @@ const express = require('express')
 const port = process.env.PORT || 5000
 const line = require('@line/bot-sdk')
 const { randomEat } = require('./services/randomEat')
-let state = 'normal'
+const memo = require('./services/memo')
+let state = 'idle'
 const config = {
   channelAccessToken: 'oCV3ANut0xcuUWbWtaOjid5IqBtkgcdY7GL6bEXL4aZMhFjXHKw2iQHzcLYbk9tgzD61mVb67W9ap315frqdzcNqJBdltEAWT9DB0ozP6zdM4zfRqKWYGk9BqeMkwENjwVhPY4b3knvBYnynr+yY5gdB04t89/1O/w1cDnyilFU=',
   channelSecret: '1d80d885eabef21974c85038a7845c6a'
@@ -28,10 +29,12 @@ function handleEvent(event) {
     return Promise.resolve(null)
   }
   if (state === 'memo') {
-    text = state
+    memo.write(event.message.text)
+    state = 'idle'
   } else {
     if (event.message.text === 'จด') {
       state = 'memo'
+      text = 'มึงมีนัดอะไร?'
     }
     else if (event.message.text.includes('กินอะไรดี')) {
       text = randomEat()
