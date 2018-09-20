@@ -44,7 +44,7 @@ function handleEvent(event) {
     }
   } else if (state === 'memo-date') {
     try {
-      memo.setDate(event.message.date)
+      memo.setDate(event.message.text)
       memo.write()
       text = 'นัดให้มึงแล้ว'
     } catch (err) {
