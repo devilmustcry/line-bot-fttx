@@ -29,7 +29,12 @@ function handleEvent(event) {
     return Promise.resolve(null)
   }
   if (state === 'memo') {
-    memo.write(event.message.text)
+    try {
+      memo.write(event.message.text)
+      text = 'จดนัดให้มึงแล้ว'
+    } catch (err) {
+      text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
+    }
     state = 'idle'
   } else {
     if (event.message.text === 'จด') {

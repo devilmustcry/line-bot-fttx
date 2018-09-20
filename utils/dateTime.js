@@ -1,4 +1,5 @@
 const moment = require('moment')
+moment.locale('th')
 
 const dateTime = {
   nowDate (date) {
@@ -8,3 +9,5 @@ const dateTime = {
     return moment()
   }
 }
+
+module.exports = dateTime
