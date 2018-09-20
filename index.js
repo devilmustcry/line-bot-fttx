@@ -27,8 +27,7 @@ function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
-  console.log(event.message.text)
-  if (event.message.text.include('กินอะไรดี')) {
+  if (event.message.text.includes('กินอะไรดี')) {
     text = randomEat()
   }
   return client.replyMessage(event.replyToken, {
