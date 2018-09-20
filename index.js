@@ -1,7 +1,7 @@
 const express = require('express')
 const port = process.env.PORT || 5000
-const line = require('@line/bot-sdk');
-
+const line = require('@line/bot-sdk')
+const { randomEat } = require('./services/randomEat')
 const config = {
   channelAccessToken: 'oCV3ANut0xcuUWbWtaOjid5IqBtkgcdY7GL6bEXL4aZMhFjXHKw2iQHzcLYbk9tgzD61mVb67W9ap315frqdzcNqJBdltEAWT9DB0ozP6zdM4zfRqKWYGk9BqeMkwENjwVhPY4b3knvBYnynr+yY5gdB04t89/1O/w1cDnyilFU=',
   channelSecret: '1d80d885eabef21974c85038a7845c6a'
@@ -16,7 +16,6 @@ app.post('/webhook', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
     .then((result) =>  {
-      console.log('Return result')
       res.json(result) 
     })
     .catch((error) => console.log(error));
@@ -24,16 +23,17 @@ app.post('/webhook', line.middleware(config), (req, res) => {
 });
 const client = new line.Client(config);
 function handleEvent(event) {
+  let text = 'มึงพูดเรื่องไรของมึงวะ....'
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
-  console.log(event.type)
-  console.log(event.message.type)
-  console.log(event.message)
+  if (event.message.text.include('กินอะไรดี')) {
+    text = randomEat()
+  }
   return client.replyMessage(event.replyToken, {
     type: 'text',
-    text: 'สวัสดีตรองนี่คือก้าวแรกของ Line bot'
-  });
+    text: text
+  })
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))
 
