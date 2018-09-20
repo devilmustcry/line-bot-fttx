@@ -27,6 +27,7 @@ const memoServices = {
     this.state.text = text
   },
   setDate (date) {
+    console.log(date, 'Date get from message')
     console.log(dateTime.nowDate(date))
     this.state.date = dateTime.nowDate(date).unix()
   }
