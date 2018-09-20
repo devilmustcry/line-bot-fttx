@@ -1,23 +1,35 @@
-const express = require('express')
+require('dotenv').config()
+const Koa = require('koa')
+const cors = require('kcors')
+const Router = require('koa-router')
 const port = process.env.PORT || 5000
 const { randomEat } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
 const {lineClient, middleware} = require('./clients/lineClient')
+let routerObjects = new Router()
 
-const app = express()
-app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>')
+const app = new Koa()
+app.use(cors)
+
+routerObjects.get('/', (ctx) => {
+  ctx.body = 'Hello world'
 })
-app.post('/webhook', middleware, (req, res) => {
-  Promise
-    .all(req.body.events.map(handleEvent))
-    .then((result) =>  {
-      res.json(result) 
-    })
-    .catch((error) => console.log(error));
+routerObjects.post('/webhook', middleware, (ctx) => {
+  Promise.all(ctx.body.events.map(handleEvent))
+  .then(result => res.json(result))
+  .catch((error) => console.log(error))
+})
+app.use(routerObjects.routes())
+// app.post('/webhook', middleware, (req, res) => {
+//   Promise
+//     .all(req.body.events.map(handleEvent))
+//     .then((result) =>  {
+//       res.json(result) 
+//     })
+//     .catch((error) => console.log(error));
 
-});
+// });
 function handleEvent(event) {
   const userResponseText = event.message.text
   let text = 'มึงพูดเรื่องไรของมึงวะ....'
@@ -53,7 +65,8 @@ function handleEvent(event) {
       state = 'memo-text'
       text = 'มึงมีนัดอะไร?'
     } else if (userResponseText.includes('มีนัดอะไร')) {
-      text = memo.getAllAvailable()
+      
+      // text = memo.getAllAvailable()
       console.log(text, 'Text back from get all available')
     } else if (userResponseText.includes('กินอะไรดี')) {
       text = randomEat()
