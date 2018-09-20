@@ -10,7 +10,7 @@ const memoServices = {
     const memoRef = database.ref('memos/')
     memoRef.push({
       text: this.state.text,
-      date: dateTime.nowDate(this.state.date).unix(),
+      date: this.state.date,
       timestamp: dateTime.nowDate().format()
     })
   },
@@ -27,7 +27,8 @@ const memoServices = {
     this.state.text = text
   },
   setDate (date) {
-    this.state.date = date
+    console.log(dateTime.nowDate(date))
+    this.state.date = dateTime.nowDate(date).unix()
   }
 }
 module.exports = memoServices
