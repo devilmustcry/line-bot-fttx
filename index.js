@@ -54,6 +54,7 @@ function handleEvent(event) {
       text = 'มึงมีนัดอะไร?'
     } else if (userResponseText.includes('มีนัดอะไร')) {
       text = memo.getAllAvailable()
+      console.log(text, 'Text back from get all available')
     } else if (userResponseText.includes('กินอะไรดี')) {
       text = randomEat()
     }

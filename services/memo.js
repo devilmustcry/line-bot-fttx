@@ -28,6 +28,8 @@ const memoServices = {
         })
         return text
       }
+    }).then((text) => {
+      return text
     })
   },
   setText (text) {
