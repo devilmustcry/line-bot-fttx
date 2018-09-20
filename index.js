@@ -1,6 +1,7 @@
 require('dotenv').config()
 const Koa = require('koa')
 const cors = require('kcors')
+const koaBody = require('koa-body')
 const Router = require('koa-router')
 const port = process.env.PORT || 5000
 const { randomEat } = require('./services/randomEat')
@@ -16,11 +17,16 @@ routerObjects.get('/', (ctx) => {
   ctx.body = 'Hello world'
 })
 routerObjects.post('/webhook', middleware, (ctx) => {
+  console.log(ctx.body)
   Promise.all(ctx.body.events.map(handleEvent))
   .then(result => res.json(result))
   .catch((error) => console.log(error))
 })
 app.use(routerObjects.routes())
+app.use(koaBody({
+  formLimit: '5mb',
+  multipart: true
+}))
 // app.post('/webhook', middleware, (req, res) => {
 //   Promise
 //     .all(req.body.events.map(handleEvent))
