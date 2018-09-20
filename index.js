@@ -12,21 +12,21 @@ let routerObjects = new Router()
 
 const app = new Koa()
 app.use(cors())
-
-routerObjects.get('/', (ctx) => {
-  ctx.body = 'Hello world'
-})
-routerObjects.post('/webhook', (ctx) => {
-  console.log(ctx.request.body)
-  // Promise.all(ctx.request.body.events.map(handleEvent))
-  // .then(result => res.json(result))
-  // .catch((error) => console.log(error))
-})
-app.use(routerObjects.routes())
 app.use(koaBody({
   formLimit: '5mb',
   multipart: true
 }))
+routerObjects.get('/', (ctx) => {
+  ctx.body = 'Hello world'
+})
+routerObjects.post('/webhook', middleware, (ctx) => {
+  // console.log(ctx.request.body)
+  Promise.all(ctx.request.body.events.map(handleEvent))
+  .then(result => res.json(result))
+  .catch((error) => console.log(error))
+})
+app.use(routerObjects.routes())
+
 // app.post('/webhook', middleware, (req, res) => {
 //   Promise
 //     .all(req.body.events.map(handleEvent))
