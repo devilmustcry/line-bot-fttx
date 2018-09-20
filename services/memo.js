@@ -25,11 +25,9 @@ const memoServices = {
         })
         const text = allValue.reduce((prev, curr, index) => {
           return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
-        })
+        }, '')
         return text
       }
-    }).then((text) => {
-      return text
     })
   },
   setText (text) {
