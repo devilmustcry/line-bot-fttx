@@ -19,10 +19,7 @@ app.use(koaBody({
 routerObjects.get('/', (ctx) => {
   ctx.body = 'Hello world'
 })
-routerObjects.post('/webhook', async (ctx) => {
-  await middleware()
-  await next()
-}, async (ctx) => {
+routerObjects.post('/webhook', middleware, async (ctx) => {
   // console.log(ctx.request.body)
   const result = await Promise.all(ctx.request.body.events.map(handleEvent))
   ctx.body = result
