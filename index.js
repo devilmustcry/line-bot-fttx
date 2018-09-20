@@ -8,6 +8,7 @@ const { randomEat } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
 const {lineClient, middleware} = require('./clients/lineClient')
+const lineBotMilddleware = require('linebot-koa-middleware')
 let routerObjects = new Router()
 
 const app = new Koa()
@@ -24,7 +25,7 @@ routerObjects.post('/webhook', async (ctx) => {
   const result = await Promise.all(ctx.request.body.events.map(handleEvent))
   ctx.body = result
 })
-app.use(middleware)
+app.use(lineBotMilddleware(lineClient))
 app.use(routerObjects.routes())
 
 // app.post('/webhook', middleware, (req, res) => {
