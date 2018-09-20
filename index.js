@@ -8,7 +8,6 @@ const { randomEat } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
 const {lineClient, middleware} = require('./clients/lineClient')
-const lineBotMilddleware = require('linebot-koa-middleware')
 let routerObjects = new Router()
 
 const app = new Koa()
@@ -25,8 +24,30 @@ routerObjects.post('/webhook', async (ctx) => {
   const result = await Promise.all(ctx.request.body.events.map(handleEvent))
   ctx.body = result
 })
-app.use(lineBotMilddleware(lineClient))
 app.use(routerObjects.routes())
+app.use((function *(ctx, next){
+  // 一開始複製的密碼
+  const channelSecret = process.env.CHANNEL_SECRET
+
+  // 取 User 送來的訊息 Object
+  const koaRequest = ctx.request;
+
+  // 按 Line 的規定設定加密 ( [[Day 23] 動手篇 - 等等！什麼是 Webhooks？](http://ithelp.ithome.com.tw/articles/10184987) 有提到 )
+  const hash = crypto.createHmac('sha256', channelSecret)
+            .update(Buffer.from(JSON.stringify(koaRequest.body), 'utf8'))
+            .digest('base64');
+            
+  // 和 Request 送來做比對 ( Status Code 這階段會有 200 / 401 )
+  if ( koaRequest.headers['x-line-signature'] === hash ) {
+    ctx.status = 200;
+
+  } else {
+    ctx.body = 'Unauthorized! Channel Serect and Request header aren\'t the same.';
+    ctx.status = 401;
+  }
+  
+  yield next();
+}))
 
 // app.post('/webhook', middleware, (req, res) => {
 //   Promise
