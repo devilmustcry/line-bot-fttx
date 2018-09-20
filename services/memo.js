@@ -16,17 +16,19 @@ const memoServices = {
   },
   async getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
-    const memos = await database.ref('memos/').startAt(todayUnix).once('value')
-    console.log(memos.val())
-    const allValue = Object.values(memos.val()).map((memo) => {
-      return memo
-    })
-    console.log(allValue)
-    const text = allValue.reduce((prev, curr, index) => {
-      return prev + `มึงมีนัดวันที่ ${dateTime.nowDateTH(curr.date)} นัดไป ${curr.text} \n`
-    }, '')
-    console.log(text)
-    return text
+    const memos = await database.ref('memos/').once('value')
+    if (memos.val()){
+      const allValue = Object.values(memos.val()).map((memo) => {
+        return memo
+      })
+      console.log(allValue)
+      const text = allValue.reduce((prev, curr, index) => {
+        return prev + `มึงมีนัดวันที่ ${dateTime.nowDateTH(curr.date)} นัดไป ${curr.text} \n`
+      }, '')
+      console.log(text)
+      return text
+    }
+    return 'ไม่มีนัดว้อย มึงว่าง!!!'
   },
   setText (text) {
     this.state.text = text
