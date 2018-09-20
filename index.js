@@ -16,11 +16,11 @@ app.use(cors())
 routerObjects.get('/', (ctx) => {
   ctx.body = 'Hello world'
 })
-routerObjects.post('/webhook', middleware, (ctx) => {
-  console.log(ctx.body)
-  Promise.all(ctx.body.events.map(handleEvent))
-  .then(result => res.json(result))
-  .catch((error) => console.log(error))
+routerObjects.post('/webhook', (ctx) => {
+  console.log(ctx.request.body)
+  // Promise.all(ctx.request.body.events.map(handleEvent))
+  // .then(result => res.json(result))
+  // .catch((error) => console.log(error))
 })
 app.use(routerObjects.routes())
 app.use(koaBody({
