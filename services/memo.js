@@ -15,15 +15,15 @@ const memoServices = {
     })
   },
   async getAllAvailable() {
-    const todayUnix = dateTime.nowDate().startOf('day').unix()
-    const memos = await database.ref('memos/').once('value')
+    const todayUnix = dateTime.nowDate().startOf('day')
+    const memos = await database.ref('memos/').orderByChild('date').startAt(todayUnix).once('value')
     if (memos.val()){
       const allValue = Object.values(memos.val()).map((memo) => {
         return memo
       })
       console.log(allValue)
       const text = allValue.reduce((prev, curr, index) => {
-        return prev + `มึงมีนัดวันที่ ${dateTime.nowDateTH(curr.date)} นัดไป ${curr.text} \n`
+        return prev + `มึงมีนัดวันที่ ${dateTime.nowDateTH(curr.date).format('DD MMM YYYY')} นัดไป ${curr.text} \n`
       }, '')
       console.log(text)
       return text
@@ -34,7 +34,7 @@ const memoServices = {
     this.state.text = text
   },
   setDate (date) {
-    this.state.date = dateTime.nowDate(date).unix()
+    this.state.date = dateTime.nowDate(date)
   }
 }
 module.exports = memoServices
