@@ -17,12 +17,12 @@ const memoServices = {
   async getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
     const memos = await database.ref('memos/').startAt(todayUnix).once('value')
-    console.log(memos)
     const allValue = Object.keys(memos).map((key) => {
-      return memos[key]
+      return memos[key].val()
     })
+    console.log(allValue)
     const text = allValue.reduce((prev, curr, index) => {
-      return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
+      return prev + `มึงมีนัดวันที่ ${dateTime.nowDateTH(curr.date)} นัดไป ${curr.text} \n`
     }, '')
     console.log(text)
     return text

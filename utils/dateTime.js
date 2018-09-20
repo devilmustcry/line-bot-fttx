@@ -7,6 +7,12 @@ const dateTime = {
       return moment(date)
     }
     return moment()
+  },
+  nowDateTH (date) {
+    if (date) {
+      return moment(date).utc().utcOffset(7)
+    }
+    return moment().utc().utcOffset(7)
   }
 }
 
