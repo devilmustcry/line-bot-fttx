@@ -3,11 +3,9 @@ const Koa = require('koa')
 const cors = require('kcors')
 const koaBody = require('koa-body')
 const Router = require('koa-router')
+const crypto = require('crypto')
+const { handleEvent } = require('./controller')
 const port = process.env.PORT || 5000
-const { randomEat } = require('./services/randomEat')
-const memo = require('./services/memo')
-let state = 'idle'
-const {lineClient, middleware} = require('./clients/lineClient')
 let routerObjects = new Router()
 
 const app = new Koa()
@@ -26,18 +24,12 @@ routerObjects.post('/webhook', async (ctx) => {
 })
 app.use(routerObjects.routes())
 app.use((function *(ctx, next){
-  // 一開始複製的密碼
   const channelSecret = process.env.CHANNEL_SECRET
-
-  // 取 User 送來的訊息 Object
   const koaRequest = ctx.request;
 
-  // 按 Line 的規定設定加密 ( [[Day 23] 動手篇 - 等等！什麼是 Webhooks？](http://ithelp.ithome.com.tw/articles/10184987) 有提到 )
   const hash = crypto.createHmac('sha256', channelSecret)
             .update(Buffer.from(JSON.stringify(koaRequest.body), 'utf8'))
             .digest('base64');
-            
-  // 和 Request 送來做比對 ( Status Code 這階段會有 200 / 401 )
   if ( koaRequest.headers['x-line-signature'] === hash ) {
     ctx.status = 200;
 
@@ -45,7 +37,6 @@ app.use((function *(ctx, next){
     ctx.body = 'Unauthorized! Channel Serect and Request header aren\'t the same.';
     ctx.status = 401;
   }
-  
   yield next();
 }))
 
@@ -58,52 +49,6 @@ app.use((function *(ctx, next){
 //     .catch((error) => console.log(error));
 
 // });
-function handleEvent(event) {
-  const userResponseText = event.message.text
-  let text = 'มึงพูดเรื่องไรของมึงวะ....'
-  if (event.type !== 'message' || event.message.type !== 'text') {
-    return Promise.resolve(null)
-  }
-  if (userResponseText === 'q') {
-    text = 'ถอดกางเกงแล้วไม่เย็ดซะแล้วไง'
-    state = 'idle'
-  }
-  else if (state === 'memo-text') {
-    try {
-      memo.setText(userResponseText)
-      text = 'นัดมึงวันไหน?'
-      state = 'memo-date'
-    } catch (err) {
-      console.log(err)
-      text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
-      state = idle
-    }
-  } else if (state === 'memo-date') {
-    try {
-      memo.setDate(userResponseText)
-      memo.write()
-      text = 'นัดให้มึงแล้ว'
-    } catch (err) {
-      console.log(err)
-      text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
-    }
-    state = 'idle'
-  } else {
-    if (userResponseText === 'จด') {
-      state = 'memo-text'
-      text = 'มึงมีนัดอะไร?'
-    } else if (userResponseText.includes('มีนัดอะไร')) {
-      
-      // text = memo.getAllAvailable()
-      console.log(text, 'Text back from get all available')
-    } else if (userResponseText.includes('กินอะไรดี')) {
-      text = randomEat()
-    }
-  }
-  return lineClient.replyMessage(event.replyToken, {
-    type: 'text',
-    text: text
-  })
-}
+
 app.listen(port)
 console.log('Sever is start at ', port)

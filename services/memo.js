@@ -6,37 +6,31 @@ const memoServices = {
     text: '',
     date: ''
   },
-  write () {
-    const memoRef = database.ref('memos/')
-    memoRef.push({
+  async write () {
+    const memoRef = await database.ref('memos/')
+    await memoRef.push({
       text: this.state.text,
       date: this.state.date,
       timestamp: dateTime.nowDate().format()
     })
   },
-  getAllAvailable() {
+  async getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').unix()
-    const memoRef = database.ref('memos/')
-    memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
-      if (snap.val()) {
-        const objectKeys = Object.keys(snap.val())
-        const allValue = objectKeys.map((key) => {
-          return snap.val()[key]
-        })
-        const text = allValue.reduce((prev, curr, index) => {
-          return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
-        }, '')
-        console.log(text, 'Text in snapshot')
-        return text
-      }
+    const memos = await database.ref('memos/').startAt(todayUnix).once('value')
+    console.log(memos)
+    const allValue = Object.keys(memos).map((key) => {
+      return memos[key]
     })
+    const text = allValue.reduce((prev, curr, index) => {
+      return prev + `มึงมีนัดวันที่ ${dateTime.nowDate(curr.date)} นัดไป ${curr.text} \n`
+    }, '')
+    console.log(text)
+    return text
   },
   setText (text) {
     this.state.text = text
   },
   setDate (date) {
-    console.log(date, 'Date get from message')
-    console.log(dateTime.nowDate(date))
     this.state.date = dateTime.nowDate(date).unix()
   }
 }
