@@ -53,7 +53,7 @@ function handleEvent(event) {
       state = 'memo-text'
       text = 'มึงมีนัดอะไร?'
     } else if (userResponseText.includes('มีนัดอะไร')) {
-
+      text = memo.getAllAvailable()
     } else if (userResponseText.includes('กินอะไรดี')) {
       text = randomEat()
     }
