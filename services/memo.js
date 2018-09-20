@@ -19,7 +19,7 @@ const memoServices = {
     const memoRef = database.ref('memos/')
     memoRef.orderByChild('date').startAt(todayUnix).on('value', (snap) => {
       if (snap.val()) {
-        const objectKeys = snap.val().keys()
+        const objectKeys = Object.keys(snap.val())
         const allValue = objectKeys.map((key) => {
           return snap.val()[key]
         })
