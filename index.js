@@ -56,14 +56,20 @@ function handleEvent(event) {
     if (event.message.text === 'จด') {
       state = 'memo-text'
       text = 'มึงมีนัดอะไร?'
-    }
-    else if (event.message.text.includes('กินอะไรดี')) {
+    } else if (event.message.includes('มีนัดอะไร')) {
+
+    } else if (event.message.text.includes('กินอะไรดี')) {
       text = randomEat()
     }
   }
   return client.replyMessage(event.replyToken, {
     type: 'text',
-    text: text
+    text: text,
+    data : {  
+      "type":"message",
+      "label":"Yes",
+      "text":"Yes"
+    }
   })
 }
 app.listen(port, () => console.log(`app listening on port ${port}!`))
