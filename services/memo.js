@@ -15,7 +15,7 @@ const memoServices = {
     })
   },
   async getAllAvailable() {
-    const todayUnix = dateTime.nowDate().startOf('day').unix()
+    const todayUnix = dateTime.nowDate().startOf('day').valueOf()
     const memos = await database.ref('memos/').orderByChild('date').startAt(todayUnix).once('value')
     if (memos.val()){
       const allValue = Object.values(memos.val()).map((memo) => {
@@ -35,7 +35,7 @@ const memoServices = {
   },
   setDate (date) {
     console.log(dateTime.nowDate(date).format('YYYY-MM-DD'))
-    this.state.date = dateTime.nowDate(date).unix()
+    this.state.date = dateTime.nowDate(date).valueOf()
   }
 }
 module.exports = memoServices
