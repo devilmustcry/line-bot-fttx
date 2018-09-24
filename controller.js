@@ -1,7 +1,7 @@
 const { randomEat } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
-const {lineClient, middleware} = require('./clients/lineClient')
+const {lineClient} = require('./clients/lineClient')
 
 const controller = {
   async handleEvent(event) {
@@ -27,7 +27,7 @@ const controller = {
     } else if (state === 'memo-date') {
       try {
         memo.setDate(userResponseText)
-        memo.write()
+        memo.write(event.source.userId)
         text = 'นัดให้มึงแล้ว'
       } catch (err) {
         console.log(err)
