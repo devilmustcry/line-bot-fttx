@@ -23,7 +23,6 @@ const memoServices = {
     if (memos.val()) {
       return memoFormatter.formatCronMemo(memos)
     }
-    console.log('WTF')
     return null
   },
   async deleteOutOfDateMeeting () {
@@ -35,6 +34,7 @@ const memoServices = {
       for(key of keys) {
         updates[key] = null
       }
+      console.log(updates)
      await memoModel.update(updates)
     }
   },

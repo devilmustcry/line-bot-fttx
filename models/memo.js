@@ -23,7 +23,6 @@ const memoModel = {
     return await memoRef.orderByChild('date').endAt(todayUnix).once('value')
   },
   async update (updates) {
-    console.log(updates)
     const memoRef = firebase.database().ref('memos/')
     return await memoRef.update(updates)
   }
