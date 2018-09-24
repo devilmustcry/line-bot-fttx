@@ -1,6 +1,5 @@
 require('dotenv').config()
 const cron = require('cron')
-const { nowDate } = require('../utils/dateTime')
 const memo = require('../services/memo')
 const {lineClient} = require('../clients/lineClient')
 const CronJob = cron.CronJob

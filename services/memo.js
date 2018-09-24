@@ -25,7 +25,7 @@ const memoServices = {
     return 'ไม่มีนัดว้อย มึงว่าง!!!'
   },
   async checkForTodayMeeting () {
-    const todayUnix = nowDate().startOf('day').valueOf()
+    const todayUnix = dateTime.nowDate().startOf('day').valueOf()
     const memos = await database.ref('memos/').orderByChild('date').equalTo(todayUnix).once('value')
     if (memos.val()) {
       return memoFormatter.formatCronMemo(memos)
