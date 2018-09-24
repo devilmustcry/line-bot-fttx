@@ -30,6 +30,7 @@ const memoServices = {
     if (memos.val()) {
       return memoFormatter.formatCronMemo(memos)
     }
+    console.log('WTF')
     return null
   },
   setText (text) {
