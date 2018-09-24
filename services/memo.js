@@ -20,7 +20,7 @@ const memoServices = {
     const todayUnix = dateTime.nowDate().startOf('day').valueOf()
     const memos = await database.ref('memos/').orderByChild('date').startAt(todayUnix).once('value')
     if (memos.val()){
-      return memoformatter.formatMemo(memos)
+      return memoFormatter.formatMemo(memos)
     }
     return 'ไม่มีนัดว้อย มึงว่าง!!!'
   },
@@ -28,7 +28,7 @@ const memoServices = {
     const todayUnix = nowDate().startOf('day').valueOf()
     const memos = await database.ref('memos/').orderByChild('date').equalTo(todayUnix).once('value')
     if (memos.val()) {
-      return memoformatter.formatMemo(memos)
+      return memoFormatter.formatCronMemo(memos)
     }
     return 'ไม่มีนัดว้อย มึงว่าง!!!'
   },

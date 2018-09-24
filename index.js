@@ -4,6 +4,7 @@ const cors = require('kcors')
 const koaBody = require('koa-body')
 const Router = require('koa-router')
 const crypto = require('crypto')
+const cron = require('./cron')
 const { handleEvent } = require('./controller')
 const port = process.env.PORT || 5000
 let routerObjects = new Router()
@@ -51,4 +52,5 @@ app.use((function *(ctx, next){
 // });
 
 app.listen(port)
+cron.start()
 console.log('Sever is start at ', port)
