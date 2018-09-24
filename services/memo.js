@@ -29,7 +29,7 @@ const memoServices = {
     const todayUnix = dateTime.nowDate().subtract(1,'day').startOf('day').valueOf()
     const memos = await memoModel.getExpiredMemo(todayUnix)
     if (memos.val()) {
-      const keys = Object.keys(memos)
+      const keys = Object.keys(memos.val())
       let updates = {}
       for(key of keys) {
         updates[key] = null
