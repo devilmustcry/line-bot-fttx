@@ -38,11 +38,11 @@ const memoServices = {
     const memos = await database.ref('memos/').orderByChild('date').endAt(todayUnix).once('value')
     if (memos.val()) {
       const keys = Object.keys(memos)
-      let updates = []
+      let updates = {}
       for(key of keys) {
-        update[key] = null
+        update[`memos/${key}`] = null
       }
-      await database.ref('memos/').update(updates)
+      await database.ref().update(updates)
     }
   },
   setText (text) {
