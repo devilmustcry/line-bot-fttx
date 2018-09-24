@@ -30,7 +30,7 @@ const memoServices = {
     if (memos.val()) {
       return memoFormatter.formatCronMemo(memos)
     }
-    return 'ไม่มีนัดว้อย มึงว่าง!!!'
+    return null
   },
   setText (text) {
     this.state.text = text

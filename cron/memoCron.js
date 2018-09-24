@@ -11,11 +11,13 @@ module.exports = new CronJob({
   async onTick () {
     try {
       const messages = await memo.checkForTodayMeeting()
-      for (message of messages) {
-        lineClient.pushMessage(message.userId, {
-          type: 'text',
-          text: message.text
-        })
+      if (messages) {
+        for (message of messages) {
+          lineClient.pushMessage(message.userId, {
+            type: 'text',
+            text: message.text
+          })
+        }
       }
     } catch (err) {
       console.log(err)
