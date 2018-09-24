@@ -33,7 +33,7 @@ const memoServices = {
       const keys = Object.keys(memos)
       let updates = {}
       for(key of keys) {
-        update[key] = null
+        updates[key] = null
       }
      await memoModel.update(updates)
     }
