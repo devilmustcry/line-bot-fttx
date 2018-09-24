@@ -1,24 +1,17 @@
-const firebase = require('../utils/firebase')
 const dateTime = require('../utils/dateTime')
 const memoFormatter = require('../formatter/memoFormatter')
-const database = firebase.database()
+const memoModel = require('../models/memo')
 const memoServices = {
   state: {
     text: '',
     date: ''
   },
   async write (userId) {
-    const memoRef = await database.ref('memos/')
-    await memoRef.push({
-      text: this.state.text,
-      date: this.state.date,
-      userId: userId,
-      timestamp: dateTime.nowDate().format()
-    })
+    await memoModel.create(this.state.text, this.state.date, userId, dateTime.nowDate().format())
   },
   async getAllAvailable() {
     const todayUnix = dateTime.nowDate().startOf('day').valueOf()
-    const memos = await database.ref('memos/').orderByChild('date').startAt(todayUnix).once('value')
+    const memos = await memoModel.getAllAvailable(todayUnix)
     if (memos.val()){
       return memoFormatter.formatMemo(memos)
     }
@@ -26,7 +19,7 @@ const memoServices = {
   },
   async checkForTodayMeeting () {
     const todayUnix = dateTime.nowDate().startOf('day').valueOf()
-    const memos = await database.ref('memos/').orderByChild('date').equalTo(todayUnix).once('value')
+    const memos = await memoModel.getAllInDate(todayUnix)
     if (memos.val()) {
       return memoFormatter.formatCronMemo(memos)
     }
@@ -35,21 +28,20 @@ const memoServices = {
   },
   async deleteOutOfDateMeeting () {
     const todayUnix = dateTime.nowDate().subtract(1,'day').startOf('day').valueOf()
-    const memos = await database.ref('memos/').orderByChild('date').endAt(todayUnix).once('value')
+    const memos = await memoModel.getExpiredMemo(todayUnix)
     if (memos.val()) {
       const keys = Object.keys(memos)
       let updates = {}
       for(key of keys) {
-        update[`memos/${key}`] = null
+        update[key] = null
       }
-      await database.ref().update(updates)
+     await memoModel.update(updates)
     }
   },
   setText (text) {
     this.state.text = text
   },
   setDate (date) {
-    console.log(dateTime.nowDate(date).format('YYYY-MM-DD'))
     this.state.date = dateTime.nowDate(date).valueOf()
   }
 }
