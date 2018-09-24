@@ -33,6 +33,18 @@ const memoServices = {
     console.log('WTF')
     return null
   },
+  async deleteOutOfDateMeeting () {
+    const todayUnix = dateTime.nowDate().subtract(1,'day').startOf('day').valueOf()
+    const memos = await database.ref('memos/').orderByChild('date').endAt(todayUnix).once('value')
+    if (memos.val()) {
+      const keys = Object.keys(memos)
+      let updates = []
+      for(key of keys) {
+        update[key] = null
+      }
+      await database.ref('memos/').update(updates)
+    }
+  },
   setText (text) {
     this.state.text = text
   },

@@ -14,7 +14,7 @@ const memoFormatter = {
     const formattedValue = allValue.map((memo) => {
       return {
         userId: memo.userId,
-        text: `วันที่ ${dateTime.nowDateTH(memo.date)} : ${memo.text}`
+        text: `วันที่ ${dateTime.nowDateTH(memo.date).format('DD MMM YYYY')} : ${memo.text}`
       }
     })
     return formattedValue
