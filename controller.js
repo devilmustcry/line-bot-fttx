@@ -1,4 +1,4 @@
-const { randomEat } = require('./services/randomEat')
+const { randomEat, randomMenuByNumber } = require('./services/randomEat')
 const memo = require('./services/memo')
 let state = 'idle'
 const {lineClient} = require('./clients/lineClient')
@@ -22,28 +22,34 @@ const controller = {
       } catch (err) {
         console.log(err)
         text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
-        state = idle
+        state = 'idle'
       }
     } else if (state === 'memo-date') {
       try {
         memo.setDate(userResponseText)
         memo.write(event.source.userId)
         text = 'นัดให้มึงแล้ว'
+        state = 'idle'
       } catch (err) {
         console.log(err)
         text = 'เพราะมึงกาก กูเลยจดให้มึงไม่ได้'
+        state = 'idle'
       }
+      state = 'idle'
+    } else if (state === 'random-menu') {
+      text = randomMenuByNumber(userResponseText)
       state = 'idle'
     } else {
       if (userResponseText === 'จด') {
         state = 'memo-text'
         text = 'มึงมีนัดอะไร?'
       } else if (userResponseText.includes('มีนัดอะไร')) {
-        
         text = await memo.getAllAvailable()
-        // console.log(text, 'Text back from get all available')
       } else if (userResponseText.includes('กินอะไรดี')) {
         text = randomEat()
+      } else if (userResponseText.includes('สุ่มเมนู')) {
+        state = 'random-menu'
+        text = 'มีกี่เมนูให้สุ่มวะ?'
       }
     }
     return lineClient.replyMessage(event.replyToken, {
